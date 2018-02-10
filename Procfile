@@ -1,1 +1,1 @@
-web: waitress-serve --port=5000 westmarches.wsgi:application
+web: waitress-serve westmarches.wsgi:application

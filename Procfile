@@ -1,1 +1,1 @@
-web: waitress-serve westmarches.wsgi:application
+web: waitress-serve --port=$PORT westmarches.wsgi:application

@@ -1,0 +1,8 @@
+[packages]
+
+django = "*"
+django-heroku = "*"
+
+
+[requires]
+python_version = "3.6"

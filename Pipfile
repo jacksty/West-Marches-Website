@@ -8,6 +8,7 @@ verify_ssl = true
 django='*'
 django-herokuapp='*'
 waitress='*'
+djangorestframework='*'
 
 [requires]
 

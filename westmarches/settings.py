@@ -26,19 +26,21 @@ SECRET_KEY = '6qr^bd%=nerjttj%ib26(4rk3nt#x9h=kj2mjjq8xr!no&s$8+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['westmarches.herokuapp.com']
+ALLOWED_HOSTS = ['westmarches.herokuapp.com', 'localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'herokuapp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'herokuapp',
+    'rest_framework',
+    'map.apps.MapConfig',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +78,10 @@ WSGI_APPLICATION = 'westmarches.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://localhost'),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 
@@ -118,8 +123,3 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-
-# Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)

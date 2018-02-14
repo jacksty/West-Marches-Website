@@ -15,23 +15,6 @@
 </style>
 <body nodes="{{nodes}}" edges="{{edges}}" tags="{{tags}}" map="{{map}}">
     <svg width="{{width}}" height="{{height}}"></svg>
-    <button onclick="outputNodes()">Save Locations</button>
-    <form action="/submit/node" method="POST"> {% csrf_token %}
-        Name: <input type="text" name="node_name"> <br>
-        Fill: <input type="color" name="node_fill"> <br>
-        Radius: <input type="number" name="node_r"> <br>
-        Tags: <input type="text" name="node_tags"> <br>
-        <input type="number" name="map" value="{{map}}" hidden="true">
-        <input type="submit" value="Create Node">
-    </form>
-    <br>
-    <form action="/submit/edge" method="POST"> {% csrf_token %}
-        Source Name: <input type="text" name="source_name"><br>
-        Target Name: <input type="text" name="target_name"><br>
-        Distance: <input type="number" name="weight"><br>
-        <input type="number" value="{{map}}" hidden="true" name="map">
-        <input type="submit" value="Create Edge">
-    </form>
 </body>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>

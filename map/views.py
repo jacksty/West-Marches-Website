@@ -9,7 +9,7 @@ from .serializers import NodeSerializer, EdgeSerializer
 
 # Create your views here.
 
-def index(request, map=1):
+def index(request, map=2):
     template = loader.get_template('map/index.html')
     nodes = Node.objects.filter(map=map)
     edges = Edge.objects.filter(map=map)

@@ -67,7 +67,7 @@ def submit_node(request):
             else:
                 tagobj = Tag.objects.get(text=tag)
                 node.tags.add(tagobj.pk)
-    return HttpResponseRedirect("../../" + str(map.id))
+    return HttpResponseRedirect("/" + str(map.id) + "/edit")
 
 
 
@@ -87,9 +87,9 @@ def submit_edge(request):
             edge.save()
 
     if map:
-        return HttpResponseRedirect('../../' + str(map.id))
+        return HttpResponseRedirect('/' + str(map.id) + "/edit")
     else:
-        return HttpResponseRedirect('../../')
+        return HttpResponseRedirect('')
 
 
 

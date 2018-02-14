@@ -13,110 +13,26 @@
         text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
     }
 </style>
-<body nodes="{{nodes}}" edges="{{edges}}" tags="{{tags}}">
-    <svg width="960", height="600"></svg>
+<body nodes="{{nodes}}" edges="{{edges}}" tags="{{tags}}" map="{{map}}">
+    <svg width="{{width}}", height="{{height}}"></svg>
 </body>
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
-
-    const svg = d3.select("svg");
-    var width = +svg.attr("width");
-    var height = +svg.attr("height");
-
-    const body = d3.select("body");
-    const graphobj = {
-        "nodes": JSON.parse(body.attr("nodes")),
-        "links": JSON.parse(body.attr("edges")),
-    };
-
-
-    var node = svg.append('g')
-        .attr('class', 'nodes')
-        .selectAll('circle')
-        .data(graphobj.nodes)
-        .enter()
-        .append('circle')
-        .attr('r', d => d.r)
-        .attr('fill', d => d.fill)
-        .attr('id', d => d.id)
-        .call(d3.drag().on('start', dragStart).on('drag', drag).on('end', dragEnd));
-
-    var link = svg.append('g')
-        .attr('class', 'line')
-        .selectAll('line')
-        .data(graphobj.links)
-        .enter()
-        .append('line')
-        .attr('stroke', 'black');
-
-    var text = svg.append('g')
-        .attr('class', 'text')
-        .selectAll('text')
-        .data(graphobj.nodes)
-        .enter().append('text')
-        .attr('x', 8)
-        .attr('y', '.31em')
-        .text(d => d.name);
-
-    var weight = svg.append('g')
-        .attr('class', 'weight')
-        .selectAll('weight')
-        .data(graphobj.links)
-        .enter().append('text')
-        .attr('x', 8)
-        .attr('y', '.31em')
-        .text(d => d.weight);
-
-    node.append('title').text(d => {
-        console.log(d.tags);
-        let tagList = '';
-        d.tags.forEach(value => tagList += value.text + '\n');
-        return tagList;
-    });
-
-
-    var simulation = d3.forceSimulation(graphobj.nodes)
-        .force('link', d3.forceLink(graphobj.links).id(d => d.id).strength(0))
-        .on('tick', tick);
-
-
-
-    function transform(d) {
-        return `translate(${d.x},${d.y})`;
-    }
-
-    function tick() {
-        link.attr('x1', d => d.source.x)
-            .attr('x2', d => d.target.x)
-            .attr('y1', d => d.source.y)
-            .attr('y2', d => d.target.y);
-
-        weight.attr('transform', d => `translate(${(d.source.x + d.target.x) / 2},${(d.source.y + d.target.y) / 2})`);
-
-        node.attr('transform', transform);
-        text.attr('transform', transform);
-    }
-
-    function dragStart(d){
-        if (!d3.event.active)
-            simulation.alphaTarget(0.3).restart();
-        d.fx = null;
-        d.fy = null;
-    }
-
-    function drag(d){
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
-    }
-
-    function dragEnd(d){
-        if (!d3.event.active)
-            simulation.alphaTarget(0);
-        d.fx= null;
-        d.fy = null;
-    }
-
-
-    
-
-</script>
+{% load static from staticfiles %}
+<script src="{% static 'map/display.js' %}"></script>
+<button onclick="outputNodes()">Save Locations</button>
+<form action="/submit/node" method="POST"> {% csrf_token %}
+    Name: <input type="text" name="node_name"> <br>
+    Fill: <input type="color" name="node_fill"> <br>
+    Radius: <input type="number" name="node_r"> <br>
+    Tags: <input type="text" name="node_tags"> <br>
+    <input type="number" name="map" value="{{map}}" hidden="true">
+    <input type="submit" value="Create Node">
+</form>
+<br>
+<form action="/submit/edge" method="POST"> {% csrf_token %}
+    Source Name: <input type="text" name="source_name"><br>
+    Target Name: <input type="text" name="target_name"><br>
+    Distance: <input type="number" name="weight"><br>
+    <input type="number" value="{{map}}" hidden="true" name="map">
+    <input type="submit" value="Create Edge">
+</form>

@@ -35,8 +35,8 @@
     </form>
     <br>
     <form action="/submit/edge" method="POST"> {% csrf_token %}
-        Source Name: <input type="text" name="source_name"><br>
-        Target Name: <input type="text" name="target_name"><br>
+        Source Name: <input type="text" name="source_name" id="source_name"><br>
+        Target Name: <input type="text" name="target_name" id="target_name"><br>
         Distance: <input type="number" name="weight"><br>
         <input type="number" value="{{map}}" hidden="true" name="map">
         <input type="submit" value="Create Edge">

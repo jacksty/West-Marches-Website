@@ -8,16 +8,7 @@ const graphobj = {
     "links": JSON.parse(body.attr("edges")),
 };
 
-var node = svg.append('g')
-    .attr('class', 'nodes')
-    .selectAll('circle')
-    .data(graphobj.nodes)
-    .enter()
-    .append('circle')
-    .attr('r', d => d.r)
-    .attr('fill', d => d.fill)
-    .attr('id', d => d.id)
-    .call(d3.drag().on('start', dragStart).on('drag', drag).on('end', dragEnd));
+svg.call(d3.zoom().on('zoom', zoom));
 
 var link = svg.append('g')
     .attr('class', 'line')
@@ -26,6 +17,19 @@ var link = svg.append('g')
     .enter()
     .append('line')
     .attr('stroke', 'black');
+    
+var node = svg.append('g')
+    .attr('class', 'nodes')
+    .selectAll('nodes')
+    .data(graphobj.nodes)
+    .enter()
+    .append('circle')
+    .attr('r', d => d.r)
+    .attr('fill', d => d.fill)
+    .attr('id', d => d.id)
+    .call(d3.drag().on('start', dragStart).on('drag', drag).on('end', dragEnd))
+    .on('click', lClickNode)
+    .on('contextmenu', rClickNode);
 
 var text = svg.append('g')
     .attr('class', 'text')
@@ -57,9 +61,11 @@ var simulation = d3.forceSimulation(graphobj.nodes)
     .on('tick', tick);
 
 
-
-function transform(d) {
-    return `translate(${d.x},${d.y})`;
+function zoom() {
+    link.attr('transform', d3.event.transform);
+    weight.attr('transform', d3.event.transform);
+    node.attr('transform', d3.event.transform);
+    text.attr('transform', d3.event.transform);
 }
 
 function tick() {
@@ -68,10 +74,10 @@ function tick() {
         .attr('y1', d => d.source.y)
         .attr('y2', d => d.target.y);
 
-    weight.attr('transform', d => `translate(${(d.source.x + d.target.x) / 2},${(d.source.y + d.target.y) / 2})`);
+    weight.attr('x', d => (d.source.x + d.target.x) / 2).attr('y', d => (d.source.y + d.target.y) / 2);
 
-    node.attr('transform', transform);
-    text.attr('transform', transform);
+    node.attr('cx', d => d.x).attr('cy', d => d.y).attr('x', d => d.x).attr('y', d => d.y);
+    text.attr('x', d => d.x).attr('y', d => d.y);
 }
 
 function dragStart(d){
@@ -99,4 +105,18 @@ function outputNodes(){
     }}));
 
     fetch("/" + body.attr('map') + "/locations", { method: 'POST', body: json}).then(res => console.log(res));
+}
+
+var sourceBox = d3.select('#source_name');
+var targetBox = d3.select('#target_name');
+
+function lClickNode(d) {
+    if(sourceBox)
+        sourceBox.attr('value', d.name);
+}
+
+function rClickNode(d) {
+    if(targetBox)
+        targetBox.attr('value', d.name);
+    d3.event.preventDefault();
 }

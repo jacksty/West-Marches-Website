@@ -20,10 +20,10 @@
 </style>
 <head>
     <title>West Marches Map Edit</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" /> 
 </head>
 <body nodes="{{nodes}}" edges="{{edges}}" tags="{{tags}}" map="{{map}}">
-    <svg width="{{width}}" height="{{height}}" xmlns="http://www.w3.org/2000/svg"></svg>
+    <svg width="{{width}}" height="{{height}}"></svg>
     <button onclick="outputNodes()">Save Locations</button>
     <form action="/submit/node" method="POST"> {% csrf_token %}
         Name: <input type="text" name="node_name"> <br>

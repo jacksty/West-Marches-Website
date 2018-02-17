@@ -11,8 +11,8 @@ from .serializers import NodeSerializer, EdgeSerializer
 
 def index(request, map=2):
     template = loader.get_template('map/index.html')
-    nodes = Node.objects.filter(map=map)
-    edges = Edge.objects.filter(map=map)
+    nodes = Node.objects.filter(map=map, hidden=False)
+    edges = Edge.objects.filter(map=map, hidden=False)
     nodeSerializer = NodeSerializer(nodes, many=True)
     edgeSerializer = EdgeSerializer(edges, many=True)
 
@@ -49,6 +49,12 @@ def submit_node(request):
     radius = request.POST.get('node_r', 10)
     tags = request.POST.get('node_tags', '')
     map = request.POST.get('map', 1)
+    hidden = request.POST.get('node_hidden', False)
+
+    if hidden == 'on':
+        hidden = True
+    elif hidden == 'off':
+        hidden = False
 
     tags = tags.split(',')
         
@@ -56,7 +62,7 @@ def submit_node(request):
     map = Map.objects.get(pk=map)
 
     if(name):
-        node = Node(name=name, fill=fill, r=radius, map=map)
+        node = Node(name=name, fill=fill, r=radius, map=map, hidden=hidden)
         node.save()
         
         for tag in tags:
@@ -76,6 +82,12 @@ def submit_edge(request):
     target = request.POST.get('target_name', None)
     weight = request.POST.get('weight', None)
     map = request.POST.get('map', None)
+    hidden = request.POST.get('edge_hidden', False)
+
+    if hidden == 'on':
+        hidden = True
+    elif hidden == 'off':
+        hidden = False
 
     if source and target and weight and map:
         source = Node.objects.get(name=source)
@@ -83,7 +95,7 @@ def submit_edge(request):
         map = Map.objects.get(pk=map)
 
         if source and target and map:
-            edge = Edge(source=source, target=target, weight=weight, map=map)
+            edge = Edge(source=source, target=target, weight=weight, map=map, hidden=hidden)
             edge.save()
 
     if map:

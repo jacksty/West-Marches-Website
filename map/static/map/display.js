@@ -16,7 +16,7 @@ var link = svg.append('g')
     .data(graphobj.links)
     .enter()
     .append('line')
-    .attr('stroke', 'black');
+    .attr('stroke', d => d.stroke);
     
 var node = svg.append('g')
     .attr('class', 'nodes')
@@ -54,6 +54,9 @@ node.append('title').text(d => {
     d.tags.forEach(value => tagList += value.text + '\n');
     return tagList;
 });
+
+var sourceBox = d3.select('#source_name');
+var targetBox = d3.select('#target_name');
 
 
 var simulation = d3.forceSimulation(graphobj.nodes)
@@ -106,9 +109,6 @@ function outputNodes(){
 
     fetch("/" + body.attr('map') + "/locations", { method: 'POST', body: json}).then(res => console.log(res));
 }
-
-var sourceBox = d3.select('#source_name');
-var targetBox = d3.select('#target_name');
 
 function lClickNode(d) {
     if(sourceBox)

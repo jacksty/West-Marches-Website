@@ -23,6 +23,7 @@ class Node(models.Model):
     name = models.CharField(max_length=64, unique=True)
     r = models.IntegerField(default = 5)
     fill = models.CharField(max_length=20)
+    hidden = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -33,6 +34,7 @@ class Edge(models.Model):
     target = models.ForeignKey(Node, on_delete=models.CASCADE, related_name='edges_in')
     weight = models.FloatField(default=0.0)
     stroke = models.CharField(max_length = 20, default='black')
+    hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return '(' + str(self.source) + ', ' + str(self.target) + ')'

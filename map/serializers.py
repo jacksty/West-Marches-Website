@@ -5,7 +5,7 @@ from .models import Node, Edge
 class NodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Node
-        fields = ('__all__')
+        fields = ('id', 'x', 'y', 'r', 'fill', 'hidden', 'name', 'tags')
         depth = 1
 
 class EdgeSerializer(serializers.ModelSerializer):

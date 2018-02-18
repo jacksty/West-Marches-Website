@@ -26,10 +26,13 @@ var node = svg.append('g')
     .append('circle')
     .attr('r', d => d.r)
     .attr('fill', d => d.fill)
-    .attr('id', d => d.id)
-    .call(d3.drag().on('start', dragStart).on('drag', drag).on('end', dragEnd))
+    .attr('id', d => d.id);
+
+if(body.attr('edit')) {
+    node.call(d3.drag().on('start', dragStart).on('drag', drag).on('end', dragEnd))
     .on('click', lClickNode)
     .on('contextmenu', rClickNode);
+}
 
 var text = svg.append('g')
     .attr('class', 'text')
@@ -111,12 +114,10 @@ function outputNodes(){
 }
 
 function lClickNode(d) {
-    if(sourceBox)
-        sourceBox.attr('value', d.name);
+    sourceBox.attr('value', d.name);
 }
 
 function rClickNode(d) {
-    if(targetBox)
-        targetBox.attr('value', d.name);
+    targetBox.attr('value', d.name);
     d3.event.preventDefault();
 }

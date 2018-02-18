@@ -23,7 +23,7 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" /> 
 </head>
 {% if user.is_authenticated %}
-<body nodes="{{nodes}}" edges="{{edges}}" tags="{{tags}}" map="{{map}}">
+<body nodes="{{nodes}}" edges="{{edges}}" tags="{{tags}}" map="{{map}}" edit="true">
     <svg width="{{width}}" height="{{height}}"></svg>
     <button onclick="outputNodes()">Save Locations</button>
     <form action="/submit/node" method="POST"> {% csrf_token %}

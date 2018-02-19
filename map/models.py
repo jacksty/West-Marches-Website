@@ -38,3 +38,4 @@ class Edge(models.Model):
 
     def __str__(self):
         return '(' + str(self.source) + ', ' + str(self.target) + ')'
+

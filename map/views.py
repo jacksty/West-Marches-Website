@@ -27,21 +27,24 @@ def index(request, map=2):
     return HttpResponse(template.render(context, request))
 
 def edit(request, map=2):
-    template = loader.get_template('map/edit.html')
-    nodes = Node.objects.filter(map=map)
-    edges = Edge.objects.filter(map=map)
-    nodeSerializer = NodeSerializer(nodes, many=True)
-    edgeSerializer = EdgeSerializer(edges, many=True)
+    if request.user.is_authenticated:
+        template = loader.get_template('map/edit.html')
+        nodes = Node.objects.filter(map=map)
+        edges = Edge.objects.filter(map=map)
+        nodeSerializer = NodeSerializer(nodes, many=True)
+        edgeSerializer = EdgeSerializer(edges, many=True)
 
-    context = {
-        'nodes': json.dumps(nodeSerializer.data),
-        'edges': json.dumps(edgeSerializer.data),
-        'width': 900,
-        'height': 600,
-        'map': map,
-    }
- 
-    return HttpResponse(template.render(context, request))
+        context = {
+            'nodes': json.dumps(nodeSerializer.data),
+            'edges': json.dumps(edgeSerializer.data),
+            'width': 900,
+            'height': 600,
+            'map': map,
+        }
+    
+        return HttpResponse(template.render(context, request))
+    else:
+        return HttpResponse(status=401, content='<body><h1>401: Unauthorized</h1></body>')
 
 def submit_node(request):
     name = request.POST.get('node_name', None)
@@ -83,6 +86,7 @@ def submit_edge(request):
     weight = request.POST.get('weight', None)
     map = request.POST.get('map', None)
     hidden = request.POST.get('edge_hidden', False)
+    stroke = request.POST.get('edge_stroke', 'black')
 
     if hidden == 'on':
         hidden = True
@@ -95,7 +99,7 @@ def submit_edge(request):
         map = Map.objects.get(pk=map)
 
         if source and target and map:
-            edge = Edge(source=source, target=target, weight=weight, map=map, hidden=hidden)
+            edge = Edge(source=source, target=target, weight=weight, map=map, hidden=hidden, stroke=stroke)
             edge.save()
 
     if map:

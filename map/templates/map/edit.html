@@ -22,7 +22,7 @@
     <title>West Marches Map Edit</title>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" /> 
 </head>
-{% if user.is_authenticated %}
+
 <body nodes="{{nodes}}" edges="{{edges}}" tags="{{tags}}" map="{{map}}" edit="true">
     <svg width="{{width}}" height="{{height}}"></svg>
     <button onclick="outputNodes()">Save Locations</button>
@@ -40,12 +40,13 @@
         Source Name: <input type="text" name="source_name" id="source_name"><br>
         Target Name: <input type="text" name="target_name" id="target_name"><br>
         Distance: <input type="number" name="weight"><br>
+        <!--Stroke: <input type="text" name="edge_stroke" value="black"><br>-->
         Hidden: <input type="checkbox" name="edge_hidden"> <br>
         <input type="number" value="{{map}}" hidden="true" name="map">
         <input type="submit" value="Create Edge">
     </form>
 </body>
-{% endif %}
+
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 {% load static %}

@@ -9,7 +9,7 @@ from .serializers import NodeSerializer, EdgeSerializer
 
 # Create your views here.
 
-def index(request, map=2):
+def index(request, map=1):
     template = loader.get_template('map/index.html')
     nodes = Node.objects.filter(map=map, hidden=False)
     edges = Edge.objects.filter(map=map, hidden=False)
@@ -26,7 +26,7 @@ def index(request, map=2):
  
     return HttpResponse(template.render(context, request))
 
-def edit(request, map=2):
+def edit(request, map=1):
     if request.user.is_authenticated:
         template = loader.get_template('map/edit.html')
         nodes = Node.objects.filter(map=map)

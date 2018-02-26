@@ -11,6 +11,8 @@ django-herokuapp = "*"
 waitress = "*"
 djangorestframework = "*"
 whitenoise = "*"
+dj-database-url = "*"
+"psycopg2" = "*"
 
 
 [requires]
